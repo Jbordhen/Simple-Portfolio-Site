@@ -68,7 +68,7 @@ class EducationController extends Controller
             'institution_name' => 'required|string|max:255|min:3',
             'website' => 'string|url',
             'start_date' => 'required|date',
-            'end_date' => 'date',
+            'end_date' => 'date|nullable',
             'present' => 'boolean'
         ]);
 

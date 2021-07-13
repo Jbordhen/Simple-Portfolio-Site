@@ -14,8 +14,8 @@ import UpdateProfileScreen from './screens/UpdateProfileScreen'
 import UpdateEducationScreen from './screens/UpdateEducationScreen'
 import UpdateProjectScreen from './screens/UpdateProjectScreen'
 import UpdateSkillScreen from './screens/UpdateSkillScreen'
-import UpdateWorkExperience from './screens/UpdateWorkExperience'
 import UpdateReferenceScreen from './screens/UpdateReferenceScreen'
+import UpdateWorkExperienceScreen from './screens/UpdateWorkExperienceScreen'
 
 const App = () => {
   return (
@@ -31,13 +31,10 @@ const App = () => {
           />
           <Route
             path='/work_experiences/:work_experience'
-            component={UpdateWorkExperience}
+            component={UpdateWorkExperienceScreen}
           />
           <Route path='/skills/:skill' component={UpdateSkillScreen} />
-          <Route
-            path='/projects/:project'
-            component={UpdateProjectScreen}
-          />
+          <Route path='/projects/:project' component={UpdateProjectScreen} />
           <Route
             path='/educations/:education'
             component={UpdateEducationScreen}

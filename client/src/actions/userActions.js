@@ -205,19 +205,13 @@ export const getUserList = () => async (dispatch) => {
   }
 }
 
-export const getEducation = (id) => async (dispatch) => {
+export const getEducation = (education) => async (dispatch) => {
   try {
     dispatch({
       type: USER_EDUCATION_GET_REQUEST
     })
 
-    const config = {
-      // headers: {
-      //   Authorization: `Bearer ${userInfo.token}`
-      // }
-    }
-
-    const { data } = await axios.get('/api/educations' + id, config)
+    const { data } = await axios.get('/api/educations/' + education + '/')
 
     dispatch({
       type: USER_EDUCATION_GET_SUCCESS,
@@ -239,11 +233,13 @@ export const getEducation = (id) => async (dispatch) => {
   }
 }
 
-export const getExperience = (id) => async (dispatch) => {
+export const getExperience = (work_experience) => async (dispatch) => {
   try {
     dispatch({ type: USER_WORK_EXPERIENCE_GET_REQUEST })
 
-    const { data } = await axios.get(`/api/work_experiences/${id}`)
+    const { data } = await axios.get(
+      `/api/work_experiences/${work_experience}/`
+    )
 
     dispatch({
       type: USER_WORK_EXPERIENCE_GET_SUCCESS,
@@ -505,7 +501,7 @@ export const updateEducation = (formData, id) => async (dispatch, getState) => {
     }
 
     const { data } = await axios.put(
-      '/api/educations/' + id,
+      `/api/educations/${id}/`,
       { ...formData },
       config
     )

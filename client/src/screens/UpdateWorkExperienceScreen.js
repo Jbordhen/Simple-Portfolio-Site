@@ -16,7 +16,7 @@ import { useEffect } from 'react'
 import { getEducation, updateEducation } from '../actions/userActions'
 import { USER_EDUCATION_GET_RESET } from '../constants/userConstants'
 
-const UpdateEducationScreen = ({ match }) => {
+const UpdateWorkExperienceScreen = ({ match }) => {
   const {
     handleSubmit,
     register,
@@ -159,4 +159,4 @@ const UpdateEducationScreen = ({ match }) => {
   )
 }
 
-export default UpdateEducationScreen
+export default UpdateWorkExperienceScreen

@@ -73,7 +73,8 @@ import {
   USER_SKILL_GET_SUCCESS,
   USER_WORK_EXPERIENCE_GET_FAIL,
   USER_WORK_EXPERIENCE_GET_REQUEST,
-  USER_WORK_EXPERIENCE_GET_SUCCESS
+  USER_WORK_EXPERIENCE_GET_SUCCESS,
+  USER_EDUCATION_GET_RESET
 } from '../constants/userConstants'
 
 export const userLoginReducer = (state = {}, action) => {
@@ -145,6 +146,8 @@ export const getEducationReducer = (state = {}, action) => {
       return { loading: false, data: action.payload }
     case USER_EDUCATION_GET_FAIL:
       return { loading: false, error: action.payload }
+      case USER_EDUCATION_GET_RESET:
+        return {}
     default:
       return state
   }
@@ -191,7 +194,7 @@ export const getReferenceReducer = (state = {}, action) => {
     case USER_REFERENCE_GET_REQUEST:
       return { loading: true }
     case USER_REFERENCE_GET_SUCCESS:
-      return { loading: false, data: action.payload }
+      return { loading: false, education: action.payload }
     case USER_REFERENCE_GET_FAIL:
       return { loading: false, error: action.payload }
     default:
@@ -269,6 +272,7 @@ export const updateEducationReducer = (state = {}, action) => {
       return { loading: false, success: true, users: action.payload }
     case USER_EDUCATION_UPDATE_FAIL:
       return { loading: false, error: action.payload }
+
     default:
       return state
   }
