@@ -52,7 +52,7 @@ class WorkExperienceController extends Controller
      */
     public function show(WorkExperience $workExperience)
     {
-        return response(['work_experience' => $workExperience], 200);
+        return response($workExperience, 200);
     }
 
     /**

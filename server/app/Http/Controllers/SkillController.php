@@ -48,7 +48,7 @@ class SkillController extends Controller
      */
     public function show(Skill $skill)
     {
-        return response(['skil' => $skill], 200);
+        return response($skill, 200);
     }
 
     /**

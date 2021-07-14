@@ -51,7 +51,7 @@ class EducationController extends Controller
      */
     public function show(Education $education)
     {
-        return response(['education' => $education], 200);
+        return response($education, 200);
     }
 
     /**

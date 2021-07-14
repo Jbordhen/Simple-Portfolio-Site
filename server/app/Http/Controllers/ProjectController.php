@@ -50,7 +50,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        return response(['project' => $project], 200);
+        return response($project, 200);
     }
 
     /**

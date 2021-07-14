@@ -36,9 +36,13 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($user)
+    public function show(Request $request)
     {
-        $data = User::with('educations', 'workExperiences', 'references', 'skills', 'projects')->where('id', $user)->first();
+        // dd($request->query('minimized', null));
+        // dd($request->user);
+        $request->query('minimized', null) ?
+            $data = User::find($request->user)
+            : $data = User::with('educations', 'workExperiences', 'references', 'skills', 'projects')->where('id', $request->user)->first();
         return response($data, 200);
     }
 
@@ -54,9 +58,9 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'string|max:255|min:3',
             'password' => 'string|min:6|nullable',
-            "about" => 'string|max:500',
+            "about" => 'string|max:500|nullable',
             'dob' => 'date',
-            'portfolio_link' => 'url',
+            'portfolio_link' => 'url|nullable',
         ]);
         if ($validator->fails()) {
             return response(['errors' => $validator->errors()->all()], 422);

@@ -49,7 +49,7 @@ class ReferenceController extends Controller
      */
     public function show(Reference $reference)
     {
-        return response(['reference' => $reference], 200);
+        return response($reference, 200);
     }
 
     /**
