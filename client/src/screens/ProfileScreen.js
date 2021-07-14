@@ -172,7 +172,7 @@ const ProfileScreen = ({ match }) => {
                     </div>
                     {userInfo?.user?.id === id && (
                       <div className='ms-auto'>
-                        <Link to={`/work_experience/${work_experience.id}`}>
+                        <Link to={`/work_experiences/${work_experience.id}`}>
                           <i className='fas fa-edit p-2 rounded-circle text-dark'></i>
                         </Link>
                         <i
@@ -222,7 +222,7 @@ const ProfileScreen = ({ match }) => {
                     </div>
                     {userInfo?.user?.id === id && (
                       <div className='ms-auto'>
-                        <Link to={`/skill/${skill.id}`}>
+                        <Link to={`/skills/${skill.id}`}>
                           <i className='fas fa-edit p-2 rounded-circle text-dark'></i>
                         </Link>
                         <i
@@ -267,7 +267,7 @@ const ProfileScreen = ({ match }) => {
                     </div>
                     {userInfo?.user?.id === id && (
                       <div className='ms-auto'>
-                        <Link to={`/reference/${reference.id}`}>
+                        <Link to={`/references/${reference.id}`}>
                           <i className='fas fa-edit p-2 rounded-circle text-dark'></i>
                         </Link>
                         <i
@@ -323,7 +323,7 @@ const ProfileScreen = ({ match }) => {
                     </div>
                     {userInfo?.user?.id === id && (
                       <div className='ms-auto'>
-                        <Link to={`/project/${project.id}`}>
+                        <Link to={`/projects/${project.id}`}>
                           <i className='fas fa-edit p-2 rounded-circle text-dark'></i>
                         </Link>
                         <i
