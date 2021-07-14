@@ -19,6 +19,7 @@ import {
   updateSkillReducer,
   userListReducer,
   userLoginReducer,
+  userProfileGetReducer,
   userProfileUpdateReducer,
   userRegisterReducer
 } from './reducers/userReducers'
@@ -27,7 +28,8 @@ const reducer = combineReducers({
   userLogin: userLoginReducer,
   userList: userListReducer,
   userRegister: userRegisterReducer,
-  userProfile: userProfileUpdateReducer,
+  userGetProfile: userProfileGetReducer,
+  userUpdateProfile: userProfileUpdateReducer,
   userAddEducation: addEducationReducer,
   userAddSkill: addSkillReducer,
   userAddProject: addProjectReducer,

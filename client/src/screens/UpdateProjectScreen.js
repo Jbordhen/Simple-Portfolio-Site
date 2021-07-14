@@ -13,10 +13,9 @@ import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 import { useEffect } from 'react'
-import { updateProfile } from '../actions/userActions'
-import { USER_PROFILE_UPDATE_RESET } from '../constants/userConstants'
+import { getProject, updateProject } from '../actions/userActions'
 
-const UpdateProjectScreen = () => {
+const UpdateProjectScreen = ({ match }) => {
   const {
     handleSubmit,
     register,
@@ -27,141 +26,128 @@ const UpdateProjectScreen = () => {
   const history = useHistory()
   const { loading, error, userInfo } = useSelector((state) => state.userLogin)
   const {
-    loading: loadingProfile,
-    error: errorProfile,
-    success: successProfile
-  } = useSelector((state) => state.userProfile)
+    loading: loadingProject,
+    error: errorProject,
+    project
+  } = useSelector((state) => state.userGetProject)
+
+  const { success: successProject } = useSelector(
+    (state) => state.userUpdateProject
+  )
 
   const onSubmit = async (formData) => {
-    dispatch(updateProfile(formData))
+    dispatch(updateProject(formData, match.params.project))
+    if (successProject) {
+      history.goBack()
+    }
   }
 
   useEffect(() => {
     if (!userInfo) {
       history.replace('/login')
     }
-    if (successProfile) {
-      dispatch({ type: USER_PROFILE_UPDATE_RESET })
-      history.push(`/profile/${userInfo?.user?.id}`)
-    }
-  }, [dispatch, history, successProfile, userInfo])
+    dispatch(getProject(match.params.project))
+  }, [dispatch, history, match.params.project, successProject, userInfo])
 
   return (
     <>
       <Container className='d-flex justify-content-center align-items-center flex-column'>
-        {loading || loadingProfile ? (
+        {loading || loadingProject ? (
           <Spinner animation='border' />
         ) : error ? (
           <Alert variant='danger'>
             <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
             <p>{error}</p>
           </Alert>
+        ) : errorProject ? (
+          <Alert variant='danger'>
+            <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
+            <p>{errorProject}</p>
+          </Alert>
         ) : (
-          errorProfile && (
-            <Alert variant='danger'>
-              <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
-              <p>{errorProfile}</p>
-            </Alert>
-          )
+          <Col md={12} lg={6}>
+            <Card className='px-4 py-3'>
+              <Form onSubmit={handleSubmit(onSubmit)}>
+                <Form.Group>
+                  <Form.Label className='required'>Project Name</Form.Label>
+                  {errors?.name && (
+                    <p className='text-danger'>{errors.name?.message}</p>
+                  )}
+                  <Form.Control
+                    type='name'
+                    placeholder='Enter Project Name'
+                    aria-invalid={errors.name ? true : false}
+                    {...register('name', {
+                      value: project?.name,
+                      required: 'This is required',
+                      minLength: { value: 3, message: 'Atleast 3 letters' },
+                      maxLength: { value: 255, message: 'Atmost 255 letters' }
+                    })}></Form.Control>
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label>Project Link</Form.Label>
+                  {errors?.project_link && (
+                    <p className='text-danger'>
+                      {errors.project_link?.message}
+                    </p>
+                  )}
+                  <Form.Control
+                    type='text'
+                    aria-invalid={errors.project_link ? true : false}
+                    placeholder='Enter Project Link'
+                    {...register('project_link', {
+                      value: project?.project_link,
+                      maxLength: { value: 255, message: 'Atmost 255 letters' }
+                    })}></Form.Control>
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label className='required'>
+                    Project Description
+                  </Form.Label>
+                  {errors?.description && (
+                    <p className='text-danger'>{errors.description?.message}</p>
+                  )}
+                  <Form.Control
+                    type='text'
+                    as='textarea'
+                    placeholder='Project Description'
+                    aria-invalid={errors.description ? true : false}
+                    {...register('description', {
+                      value: project?.description,
+                      required: 'This is required',
+                      minLength: { value: 3, message: 'Atleast 3 letters' },
+                      maxLength: { value: 500, message: 'Atmost 500 letters' }
+                    })}></Form.Control>
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label className='required'>Start Date</Form.Label>
+                  <Form.Control
+                    type='date'
+                    {...register('start_date', {
+                      value: project?.start_date,
+                      required: 'This is required'
+                    })}></Form.Control>
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label>Ending Date</Form.Label>
+                  <Form.Control
+                    type='date'
+                    {...register('end_date', {
+                      value: project?.end_date
+                    })}></Form.Control>
+                </Form.Group>
+                <Button type='submit' variant='primary' className='my-3'>
+                  Update Project
+                </Button>
+                <Link
+                  to={`/profile/${userInfo?.user?.id}`}
+                  className='mx-2 text-decoration-none fw-bold text-dark'>
+                  Go Back
+                </Link>
+              </Form>
+            </Card>
+          </Col>
         )}
-        <Col md={12} lg={6}>
-          <Card className='px-4 py-3'>
-            <Form onSubmit={handleSubmit(onSubmit)}>
-              <Form.Group>
-                <Form.Label>Name</Form.Label>
-                {errors?.name && (
-                  <p className='text-danger'>{errors.name?.message}</p>
-                )}
-                <Form.Control
-                  type='name'
-                  placeholder={userInfo?.user?.name}
-                  aria-invalid={errors.name ? true : false}
-                  {...register('name', {
-                    value: userInfo?.user?.name,
-                    minLength: { value: 3, message: 'Atleast 3 letters' },
-                    maxLength: { value: 255, message: 'Atmost 255 letters' }
-                  })}></Form.Control>
-              </Form.Group>
-              <Form.Group>
-                <Form.Label>Email Address</Form.Label>
-                {errors?.email && (
-                  <p className='text-danger'>{errors.email?.message}</p>
-                )}
-                <Form.Control
-                  type='email'
-                  aria-invalid={errors.email ? true : false}
-                  placeholder={userInfo?.user?.email}
-                  disabled
-                  {...register('email', {
-                    maxLength: { value: 255, message: 'Atmost 255 letters' }
-                  })}></Form.Control>
-              </Form.Group>
-              <Form.Group>
-                <Form.Label>Password</Form.Label>
-                {errors?.password && (
-                  <p className='text-danger'>{errors.password?.message}</p>
-                )}
-                <Form.Control
-                  type='password'
-                  placeholder='Enter your Password'
-                  aria-invalid={errors.password ? true : false}
-                  {...register('password', {
-                    minLength: { value: 6, message: 'Atleast 6 letters' }
-                  })}></Form.Control>
-              </Form.Group>
-              <Form.Group>
-                <Form.Label>About Yourself</Form.Label>
-                <Form.Control
-                  type='text'
-                  as='textarea'
-                  placeholder={userInfo?.user?.about}
-                  {...register('about', {
-                    value: userInfo?.user?.about,
-                    maxLength: { value: 500, message: 'Atmost 500 characters.' }
-                  })}></Form.Control>
-              </Form.Group>
-              <Form.Group>
-                <Form.Label>Date of Birth</Form.Label>
-                <Form.Control
-                  type='date'
-                  placeholder={userInfo?.user?.dob}
-                  {...register('dob', {
-                    value: userInfo?.user?.dob
-                  })}></Form.Control>
-              </Form.Group>
-              <Form.Group>
-                <Form.Label>Personal Website</Form.Label>
-                {errors?.portfolio_link && (
-                  <p className='text-danger'>
-                    {errors.portfolio_link?.message}
-                  </p>
-                )}
-                <Form.Control
-                  type='text'
-                  placeholder={
-                    userInfo?.user?.portfolio_link ??
-                    'Enter your personal website link'
-                  }
-                  aria-invalid={errors.portfolio_link ? true : false}
-                  {...register('portfolio_link', {
-                    value: userInfo?.user?.portfolio_link,
-                    maxLength: { value: 255, message: 'Atmost 255 letters' }
-                  })}></Form.Control>
-              </Form.Group>
-              <Button type='submit' variant='primary' className='my-3'>
-                Update
-              </Button>
-              <Button
-                as={Link}
-                to={`/profile/${userInfo?.user?.id}`}
-                type='reset'
-                variant='primary'
-                className='my-3 mx-2'>
-                Cancel
-              </Button>
-            </Form>
-          </Card>
-        </Col>
       </Container>
     </>
   )

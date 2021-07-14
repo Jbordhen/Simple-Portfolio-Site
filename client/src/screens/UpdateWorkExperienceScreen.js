@@ -13,10 +13,9 @@ import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 import { useEffect } from 'react'
-import { getEducation, updateEducation } from '../actions/userActions'
-import { USER_EDUCATION_GET_RESET } from '../constants/userConstants'
+import { getExperience, updateExperience } from '../actions/userActions'
 
-const UpdateWorkExperienceScreen = ({ match }) => {
+const UpdateProjectScreen = ({ match }) => {
   const {
     handleSubmit,
     register,
@@ -27,136 +26,154 @@ const UpdateWorkExperienceScreen = ({ match }) => {
   const history = useHistory()
   const { loading, error, userInfo } = useSelector((state) => state.userLogin)
   const {
-    loading: loadingEducation,
-    error: errorEducation,
-    data: education
-  } = useSelector((state) => state.userGetEducation)
+    loading: loadingExperience,
+    error: errorExperience,
+    experience
+  } = useSelector((state) => state.userGetExperience)
 
-  const { user } = useSelector((state) => state.userUpdateEducation)
+  const { success: successExperience } = useSelector(
+    (state) => state.userUpdateExperience
+  )
 
   const onSubmit = async (formData) => {
-    dispatch(updateEducation(formData, match.params.education))
+    dispatch(updateExperience(formData, match.params.work_experience))
+    if (successExperience) {
+      history.goBack()
+    }
   }
 
   useEffect(() => {
     if (!userInfo) {
       history.replace('/login')
     }
-    if (user) {
-      history.push(`/profile/${userInfo}`)
-      dispatch({ type: USER_EDUCATION_GET_RESET })
-    }
-    dispatch(getEducation(match.params.education))
-  }, [dispatch, history, match.params.education, user, userInfo])
+    dispatch(getExperience(match.params.work_experience))
+  }, [dispatch, history, match.params.work_experience, userInfo])
 
   return (
     <>
       <Container className='d-flex justify-content-center align-items-center flex-column'>
-        {loading || loadingEducation ? (
+        {loading || loadingExperience ? (
           <Spinner animation='border' />
         ) : error ? (
           <Alert variant='danger'>
             <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
             <p>{error}</p>
           </Alert>
+        ) : errorExperience ? (
+          <Alert variant='danger'>
+            <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
+            <p>{errorExperience}</p>
+          </Alert>
         ) : (
-          errorEducation && (
-            <Alert variant='danger'>
-              <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
-              <p>{errorEducation}</p>
-            </Alert>
-          )
+          <Col md={12} lg={6}>
+            <Card className='px-4 py-3'>
+              <Form onSubmit={handleSubmit(onSubmit)}>
+                <Form.Group>
+                  <Form.Label className='required'>Company Name</Form.Label>
+                  {errors?.company_name && (
+                    <p className='text-danger'>
+                      {errors.company_name?.message}
+                    </p>
+                  )}
+                  <Form.Control
+                    type='text'
+                    placeholder='Enter Your Full Name'
+                    aria-invalid={errors.company_name ? true : false}
+                    {...register('company_name', {
+                      value: experience?.company_name,
+                      required: 'This is required',
+                      minLength: { value: 3, message: 'Atleast 3 letters' },
+                      maxLength: { value: 255, message: 'Atmost 255 letters' }
+                    })}></Form.Control>
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label>Web Address</Form.Label>
+                  {errors?.website && (
+                    <p className='text-danger'>{errors.website?.message}</p>
+                  )}
+                  <Form.Control
+                    type='text'
+                    aria-invalid={errors.website ? true : false}
+                    placeholder='Enter Institution Website Link'
+                    {...register('website', {
+                      value: experience?.website,
+                      maxLength: { value: 255, message: 'Atmost 255 letters' }
+                    })}></Form.Control>
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label className='required'>
+                    Company Description
+                  </Form.Label>
+                  {errors?.description && (
+                    <p className='text-danger'>{errors.description?.message}</p>
+                  )}
+                  <Form.Control
+                    type='description'
+                    placeholder='Tell something about the company'
+                    aria-invalid={errors.description ? true : false}
+                    {...register('description', {
+                      value: experience?.description,
+                      required: 'This is required',
+                      minLength: { value: 3, message: 'Atleast 3 letters' },
+                      maxLength: { value: 255, message: 'Atmost 255 letters' }
+                    })}></Form.Control>
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label className='required'>Job Position</Form.Label>
+                  {errors?.designation && (
+                    <p className='text-danger'>{errors.designation?.message}</p>
+                  )}
+                  <Form.Control
+                    type='designation'
+                    placeholder='Tell something about the company'
+                    aria-invalid={errors.designation ? true : false}
+                    {...register('designation', {
+                      value: experience?.designation,
+                      required: 'This is required',
+                      minLength: { value: 3, message: 'Atleast 3 letters' },
+                      maxLength: { value: 255, message: 'Atmost 255 letters' }
+                    })}></Form.Control>
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label className='required'>Start Date</Form.Label>
+                  <Form.Control
+                    type='date'
+                    {...register('start_date', {
+                      value: experience?.start_date,
+                      required: 'This is required'
+                    })}></Form.Control>
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label>Ending Date</Form.Label>
+                  <Form.Control
+                    type='date'
+                    {...register('end_date', {
+                      value: experience?.end_date
+                    })}></Form.Control>
+                </Form.Group>
+                <Form.Group>
+                  <Form.Check
+                    type='checkbox'
+                    label='Still an Employee of this Company'
+                    {...register('present', {
+                      value: experience?.present
+                    })}></Form.Check>
+                </Form.Group>
+                <Button type='submit' variant='primary' className='my-3'>
+                  Update Work Experience
+                </Button>
+                <Link
+                  to={`/profile/${userInfo?.user?.id}`}
+                  className='mx-2 text-decoration-none fw-bold text-dark'>
+                  Go Back
+                </Link>
+              </Form>
+            </Card>
+          </Col>
         )}
-        <Col md={12} lg={6}>
-          <Card className='px-4 py-3'>
-            <Form onSubmit={handleSubmit(onSubmit)}>
-              <Form.Group>
-                <Form.Label className='required'>Degree Name</Form.Label>
-                {errors?.name && (
-                  <p className='text-danger'>{errors.name?.message}</p>
-                )}
-                <Form.Control
-                  type='name'
-                  placeholder='Enter Degree Name'
-                  aria-invalid={errors.name ? true : false}
-                  {...register('name', {
-                    value: education?.education?.name,
-                    required: 'This is required',
-                    minLength: { value: 3, message: 'Atleast 3 letters' },
-                    maxLength: { value: 255, message: 'Atmost 255 letters' }
-                  })}></Form.Control>
-              </Form.Group>
-              <Form.Group>
-                <Form.Label className='required'>Institution Name</Form.Label>
-                {errors?.institution_name && (
-                  <p className='text-danger'>
-                    {errors.institution_name?.message}
-                  </p>
-                )}
-                <Form.Control
-                  type='institution_name'
-                  placeholder='Enter The Institution Name'
-                  aria-invalid={errors.institution_name ? true : false}
-                  {...register('institution_name', {
-                    value: education?.education?.institution_name,
-                    required: 'This is required',
-                    minLength: { value: 3, message: 'Atleast 3 letters' },
-                    maxLength: { value: 255, message: 'Atmost 255 letters' }
-                  })}></Form.Control>
-              </Form.Group>
-              <Form.Group>
-                <Form.Label>Web Address</Form.Label>
-                {errors?.website && (
-                  <p className='text-danger'>{errors.website?.message}</p>
-                )}
-                <Form.Control
-                  type='text'
-                  aria-invalid={errors.website ? true : false}
-                  placeholder='Enter Institution Website Link'
-                  {...register('website', {
-                    value: education?.education?.website,
-                    maxLength: { value: 255, message: 'Atmost 255 letters' }
-                  })}></Form.Control>
-              </Form.Group>
-              <Form.Group>
-                <Form.Label className='required'>Start Date</Form.Label>
-                <Form.Control
-                  type='date'
-                  {...register('start_date', {
-                    value: education?.education?.start_date,
-                    required: 'This is required'
-                  })}></Form.Control>
-              </Form.Group>
-              <Form.Group>
-                <Form.Label>Ending Date</Form.Label>
-                <Form.Control
-                  type='date'
-                  {...register('end_date', {
-                    value: education?.education?.end_date
-                  })}></Form.Control>
-              </Form.Group>
-              <Form.Group>
-                <Form.Check
-                  type='checkbox'
-                  label='Still Studying'
-                  {...register('present', {
-                    value: education?.education?.present
-                  })}></Form.Check>
-              </Form.Group>
-              <Button type='submit' variant='primary' className='my-3'>
-                Update Education
-              </Button>
-              <Link
-                to={`/profile/${userInfo?.user?.id}`}
-                className='mx-2 text-decoration-none fw-bold text-dark'>
-                Go Back
-              </Link>
-            </Form>
-          </Card>
-        </Col>
       </Container>
     </>
   )
 }
 
-export default UpdateWorkExperienceScreen
+export default UpdateProjectScreen

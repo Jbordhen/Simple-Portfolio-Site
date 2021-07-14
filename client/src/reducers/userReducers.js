@@ -74,7 +74,10 @@ import {
   USER_WORK_EXPERIENCE_GET_FAIL,
   USER_WORK_EXPERIENCE_GET_REQUEST,
   USER_WORK_EXPERIENCE_GET_SUCCESS,
-  USER_EDUCATION_GET_RESET
+  USER_EDUCATION_GET_RESET,
+  USER_PROFILE_GET_REQUEST,
+  USER_PROFILE_GET_SUCCESS,
+  USER_PROFILE_GET_FAIL
 } from '../constants/userConstants'
 
 export const userLoginReducer = (state = {}, action) => {
@@ -105,6 +108,19 @@ export const userRegisterReducer = (state = {}, action) => {
       return { loading: false, error: action.payload }
     case USER_REGISTER_RESET:
       return {}
+    default:
+      return state
+  }
+}
+
+export const userProfileGetReducer = (state = {}, action) => {
+  switch (action.type) {
+    case USER_PROFILE_GET_REQUEST:
+      return { loading: true }
+    case USER_PROFILE_GET_SUCCESS:
+      return { loading: false, user: action.payload }
+    case USER_PROFILE_GET_FAIL:
+      return { loading: false, error: action.payload }
     default:
       return state
   }
@@ -143,11 +159,11 @@ export const getEducationReducer = (state = {}, action) => {
     case USER_EDUCATION_GET_REQUEST:
       return { loading: true }
     case USER_EDUCATION_GET_SUCCESS:
-      return { loading: false, data: action.payload }
+      return { loading: false, education: action.payload }
     case USER_EDUCATION_GET_FAIL:
       return { loading: false, error: action.payload }
-      case USER_EDUCATION_GET_RESET:
-        return {}
+    case USER_EDUCATION_GET_RESET:
+      return {}
     default:
       return state
   }
@@ -158,7 +174,7 @@ export const getProjectReducer = (state = {}, action) => {
     case USER_PROJECT_GET_REQUEST:
       return { loading: true }
     case USER_PROJECT_GET_SUCCESS:
-      return { loading: false, data: action.payload }
+      return { loading: false, project: action.payload }
     case USER_PROJECT_GET_FAIL:
       return { loading: false, error: action.payload }
     default:
@@ -182,7 +198,7 @@ export const getExperienceReducer = (state = {}, action) => {
     case USER_WORK_EXPERIENCE_GET_REQUEST:
       return { loading: true }
     case USER_WORK_EXPERIENCE_GET_SUCCESS:
-      return { loading: false, data: action.payload }
+      return { loading: false, experience: action.payload }
     case USER_WORK_EXPERIENCE_GET_FAIL:
       return { loading: false, error: action.payload }
     default:
@@ -194,7 +210,7 @@ export const getReferenceReducer = (state = {}, action) => {
     case USER_REFERENCE_GET_REQUEST:
       return { loading: true }
     case USER_REFERENCE_GET_SUCCESS:
-      return { loading: false, education: action.payload }
+      return { loading: false, reference: action.payload }
     case USER_REFERENCE_GET_FAIL:
       return { loading: false, error: action.payload }
     default:

@@ -10,6 +10,9 @@ import {
   USER_LOGIN_REQUEST,
   USER_LOGIN_SUCCESS,
   USER_LOGOUT,
+  USER_PROFILE_GET_REQUEST,
+  USER_PROFILE_GET_SUCCESS,
+  USER_PROFILE_GET_FAIL,
   USER_PROFILE_UPDATE_FAIL,
   USER_PROFILE_UPDATE_REQUEST,
   USER_PROFILE_UPDATE_SUCCESS,
@@ -132,6 +135,31 @@ export const register = (formData) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: USER_REGISTER_FAIL,
+      payload:
+        error.response && error.response.data.errors
+          ? error.response.data.errors
+          : error.message
+    })
+  }
+}
+
+export const getProfile = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: USER_PROFILE_GET_REQUEST
+    })
+
+    const { data } = await axios.get(
+      `/api/users/${id}?minimized=true`
+    )
+
+    dispatch({
+      type: USER_PROFILE_GET_SUCCESS,
+      payload: data
+    })
+  } catch (error) {
+    dispatch({
+      type: USER_PROFILE_GET_FAIL,
       payload:
         error.response && error.response.data.errors
           ? error.response.data.errors
@@ -572,7 +600,7 @@ export const updateProject = (formData, id) => async (dispatch, getState) => {
     }
 
     const { data } = await axios.put(
-      '/api/projects/' + id,
+      `/api/projects/${id}/`,
       { ...formData },
       config
     )
@@ -607,7 +635,7 @@ export const updateSkill = (formData, id) => async (dispatch, getState) => {
     }
 
     const { data } = await axios.put(
-      '/api/skills/' + id,
+      `/api/skills/${id}/`,
       { ...formData },
       config
     )
@@ -642,7 +670,7 @@ export const updateReference = (formData, id) => async (dispatch, getState) => {
     }
 
     const { data } = await axios.put(
-      '/api/references/' + id,
+      `/api/references/${id}/`,
       { ...formData },
       config
     )

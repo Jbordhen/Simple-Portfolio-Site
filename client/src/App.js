@@ -12,10 +12,13 @@ import ProfileScreen from './screens/ProfileScreen'
 import RegisterScreen from './screens/RegisterScreen'
 import UpdateProfileScreen from './screens/UpdateProfileScreen'
 import UpdateEducationScreen from './screens/UpdateEducationScreen'
-import UpdateProjectScreen from './screens/UpdateProjectScreen'
 import UpdateSkillScreen from './screens/UpdateSkillScreen'
 import UpdateReferenceScreen from './screens/UpdateReferenceScreen'
 import UpdateWorkExperienceScreen from './screens/UpdateWorkExperienceScreen'
+import UpdateProjectScreen from './screens/UpdateProjectScreen'
+import NotFound from './screens/NotFound'
+import ProtectedRoute from './components/ProtectedRoute'
+import Unauthorized from './screens/Unauthorized'
 
 const App = () => {
   return (
@@ -25,40 +28,57 @@ const App = () => {
         <Switch>
           <Route path='/register' component={RegisterScreen} />
           <Route path='/login' component={LoginScreen} />
-          <Route
+          <ProtectedRoute
             path='/references/:reference'
             component={UpdateReferenceScreen}
           />
-          <Route
+          <ProtectedRoute
             path='/work_experiences/:work_experience'
             component={UpdateWorkExperienceScreen}
           />
-          <Route path='/skills/:skill' component={UpdateSkillScreen} />
-          <Route path='/projects/:project' component={UpdateProjectScreen} />
-          <Route
+          <ProtectedRoute path='/skills/:skill' component={UpdateSkillScreen} />
+          <ProtectedRoute
+            path='/projects/:project'
+            component={UpdateProjectScreen}
+          />
+          <ProtectedRoute
             path='/educations/:education'
             component={UpdateEducationScreen}
           />
-          <Route
+          <ProtectedRoute
             path='/profile/references'
             exact
             component={AddReferenceScreen}
           />
-          <Route
+          <ProtectedRoute
             path='/profile/work_experiences'
             exact
             component={AddWorkExperienceScreen}
           />
-          <Route path='/profile/skills' exact component={AddSkillScreen} />
-          <Route path='/profile/projects' exact component={AddProjectScreen} />
-          <Route
+          <ProtectedRoute
+            path='/profile/skills'
+            exact
+            component={AddSkillScreen}
+          />
+          <ProtectedRoute
+            path='/profile/projects'
+            exact
+            component={AddProjectScreen}
+          />
+          <ProtectedRoute
             path='/profile/educations'
             exact
             component={AddEducationScreen}
           />
-          <Route path='/profile/edit' exact component={UpdateProfileScreen} />
-          <Route path='/profile/:profile' component={ProfileScreen} />
+          <ProtectedRoute
+            path='/profile/edit'
+            exact
+            component={UpdateProfileScreen}
+          />
+          <ProtectedRoute path='/profile/:profile' component={ProfileScreen} />
           <Route path='/' exact component={HomeScreen} />
+          <Route path='/unauthorized' exact component={Unauthorized} />
+          <Route path='/*' component={NotFound} />
         </Switch>
       </main>
       <Footer />
