@@ -64,62 +64,68 @@ const UpdateSkillScreen = ({ match }) => {
             <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
             <p>{errorSkill}</p>
           </Alert>
+        ) : skill && userInfo?.user?.id !== Number(skill?.user_id) ? (
+          history.push('/unauthorized')
         ) : (
-          <Col md={12} lg={6}>
-            <Card className='px-4 py-3'>
-              <Form onSubmit={handleSubmit(onSubmit)}>
-                <Form.Group>
-                  <Form.Label className='required'>Skill Name</Form.Label>
-                  {errors?.name && (
-                    <p className='text-danger'>{errors.name?.message}</p>
-                  )}
-                  <Form.Control
-                    type='name'
-                    placeholder='Enter Skill Name'
-                    aria-invalid={errors.name ? true : false}
-                    {...register('name', {
-                      value: skill?.name,
-                      required: 'This is required',
-                      minLength: { value: 3, message: 'Atleast 3 letters' },
-                      maxLength: { value: 50, message: 'Atmost 50 letters' }
-                    })}></Form.Control>
-                </Form.Group>
-                <Form.Group>
-                  <Form.Label className='m-2'>Experience Level</Form.Label>
-                  {errors?.level && (
-                    <p className='text-danger'>{errors.level?.message}</p>
-                  )}
-                  <select
-                    aria-label='Default select example'
-                    {...register('level', { value: skill?.level })}>
-                    <option value='Beginner'>Beginner</option>
-                    <option value='Intermediate'>Intermediate</option>
-                    <option value='Master'>Master</option>
-                  </select>
-                </Form.Group>
-                <Form.Group>
-                  <Form.Label className='required'>
-                    Experience in years
-                  </Form.Label>
-                  <Form.Control
-                    type='number'
-                    label='Experience in years'
-                    {...register('experience', {
-                      value: skill?.experience,
-                      required: 'This is required'
-                    })}></Form.Control>
-                </Form.Group>
-                <Button type='submit' variant='primary' className='my-3'>
-                  Update Skill
-                </Button>
-                <Link
-                  to={`/profile/${userInfo?.user?.id}`}
-                  className='mx-2 text-decoration-none fw-bold text-dark'>
-                  Go Back
-                </Link>
-              </Form>
-            </Card>
-          </Col>
+          // <Redirect path='/unauthorized' />
+          // window.open('/unauthorized')
+          skill && (
+            <Col md={12} lg={6}>
+              <Card className='px-4 py-3'>
+                <Form onSubmit={handleSubmit(onSubmit)}>
+                  <Form.Group>
+                    <Form.Label className='required'>Skill Name</Form.Label>
+                    {errors?.name && (
+                      <p className='text-danger'>{errors.name?.message}</p>
+                    )}
+                    <Form.Control
+                      type='name'
+                      placeholder='Enter Skill Name'
+                      aria-invalid={errors.name ? true : false}
+                      {...register('name', {
+                        value: skill?.name,
+                        required: 'This is required',
+                        minLength: { value: 3, message: 'Atleast 3 letters' },
+                        maxLength: { value: 50, message: 'Atmost 50 letters' }
+                      })}></Form.Control>
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label className='m-2'>Experience Level</Form.Label>
+                    {errors?.level && (
+                      <p className='text-danger'>{errors.level?.message}</p>
+                    )}
+                    <select
+                      aria-label='Default select example'
+                      {...register('level', { value: skill?.level })}>
+                      <option value='Beginner'>Beginner</option>
+                      <option value='Intermediate'>Intermediate</option>
+                      <option value='Master'>Master</option>
+                    </select>
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label className='required'>
+                      Experience in years
+                    </Form.Label>
+                    <Form.Control
+                      type='number'
+                      label='Experience in years'
+                      {...register('experience', {
+                        value: skill?.experience,
+                        required: 'This is required'
+                      })}></Form.Control>
+                  </Form.Group>
+                  <Button type='submit' variant='primary' className='my-3'>
+                    Update Skill
+                  </Button>
+                  <Link
+                    to={`/profile/${userInfo?.user?.id}`}
+                    className='mx-2 text-decoration-none fw-bold text-dark'>
+                    Go Back
+                  </Link>
+                </Form>
+              </Card>
+            </Col>
+          )
         )}
       </Container>
     </>

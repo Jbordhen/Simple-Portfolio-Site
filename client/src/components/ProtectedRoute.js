@@ -1,14 +1,16 @@
 import { useSelector } from 'react-redux'
-import { Route, useHistory } from 'react-router-dom'
+import { Route, Redirect } from 'react-router-dom'
 
-const ProtectedRoute = ({ component, ...rest }) => {
+const ProtectedRoute = ({ component: Component, ...rest }) => {
   const { userInfo } = useSelector((state) => state.userLogin)
-  const history = useHistory()
-  if (userInfo) {
-    return <Route component={component} {...rest} />
-  }
-  history.replace('/unauthorized')
-  return <Route path='/unauthorized' />
+  return (
+    <Route
+      {...rest}
+      render={(props) =>
+        userInfo ? <Component {...props} /> : <Redirect to='/unauthorized' />
+      }
+    />
+  )
 }
 
 export default ProtectedRoute

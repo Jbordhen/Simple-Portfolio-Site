@@ -75,7 +75,7 @@ const App = () => {
             exact
             component={UpdateProfileScreen}
           />
-          <ProtectedRoute path='/profile/:profile' component={ProfileScreen} />
+          <Route path='/profile/:profile' component={ProfileScreen} />
           <Route path='/' exact component={HomeScreen} />
           <Route path='/unauthorized' exact component={Unauthorized} />
           <Route path='/*' component={NotFound} />
